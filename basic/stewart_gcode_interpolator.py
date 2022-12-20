@@ -688,6 +688,8 @@ def main():
     root.quit()
     # root.destroy()
 
+    # developed by jamil and taqi
+
 
 if __name__ == '__main__':
     main()
