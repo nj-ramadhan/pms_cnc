@@ -1,12 +1,11 @@
-from Tkinter import Frame, Tk, BOTH, Text, Menu, END, Button, Label
-import tkFont
-import tkFileDialog
+from tkinter import Frame, Tk, BOTH, Text, Menu, END, Button, Label
+from tkinter import font
+from tkinter import filedialog
 import matplotlib
-matplotlib.use("TkAgg")
+matplotlib.use("TKAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib import style
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import math
 import time
@@ -410,7 +409,7 @@ class Run(Frame):
             self.line += 1.0
         
     def onSave(self):
-        name=tkFileDialog.asksaveasfile(mode='w',defaultextension=".spnc")
+        name=filedialog.asksaveasfile(mode='w',defaultextension=".spnc")
         text2save=str(self.txtNC.get(0.0,END))
         name.write(text2save)
         name.close
@@ -424,7 +423,7 @@ class Run(Frame):
 
     def onOpen(self):
         ftypes = [('Stewart Platform NC files', '*.spnc'), ('All files', '*')]
-        dlg = tkFileDialog.Open(self, filetypes = ftypes)
+        dlg = filedialog.Open(self, filetypes = ftypes)
         fl = dlg.show()
 
         if fl != '':
@@ -476,7 +475,7 @@ class Run(Frame):
 
     def onExit(self):
         self.quit()
-        self.destroy()
+        # self.destroy()
 
     def resetData(self):
         self.txtL1.delete(1.0, 'end')
@@ -494,7 +493,7 @@ class Run(Frame):
 
 def main():
     root = Tk()
-    myFont = tkFont.nametofont("TkDefaultFont")
+    myFont = font.nametofont("TkDefaultFont")
     myFont.configure(size=11)
  
     run = Run(root)
@@ -503,7 +502,8 @@ def main():
     root.option_add('*Font', myFont)
     root.mainloop()
     root.quit()
-    root.destroy()
+    # root.destroy()
+
 
 
 if __name__ == '__main__':

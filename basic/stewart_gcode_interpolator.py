@@ -1,8 +1,8 @@
-from Tkinter import Frame, Tk, BOTH, Text, Menu, END, Button, Label
-import tkFont
-import tkFileDialog
+from tkinter import Frame, Tk, BOTH, Text, Menu, END, Button, Label
+from tkinter import font
+from tkinter import filedialog
 import matplotlib
-matplotlib.use("TkAgg")
+matplotlib.use("TKAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib import style
@@ -197,7 +197,8 @@ class Run(Frame):
         self.canvas = FigureCanvasTkAgg(self.f,self)
         self.canvas.draw()
 
-        self.ax = Axes3D(self.f)
+        # self.ax = Axes3D(self.f)
+        self.ax = self.f.add_subplot(111, projection='3d')
         self.ax.mouse_init()
         self.set_ax()
         
@@ -326,20 +327,20 @@ class Run(Frame):
 
     def validator(self):
         if (self.shortPrismatic >= self.minLength) and (self.longPrismatic <= self.maxLength) and (self.maxDL <= self.maxSpeed):  # check boundaries          
-			self.notif = "Executing Move Command"
-			self.lblNotif.configure(text=self.notif, foreground="green")
-			self.ax.cla()
-			self.set_ax()
-			self.draw()
-			self.canvas.draw()
+            self.notif = "Executing Move Command"
+            self.lblNotif.configure(text=self.notif, foreground="green")
+            self.ax.cla()
+            self.set_ax()
+            self.draw()
+            self.canvas.draw()
 			
 ##            self.ij_prismaVel()
 ##            print(self.prismaVel)
             
         else:
-			self.notif = "Move Command Couldn't Be Executed"
-			self.lblNotif.configure(text=self.notif, foreground="red")
-			self.onStop()
+            self.notif = "Move Command Couldn't Be Executed"
+            self.lblNotif.configure(text=self.notif, foreground="red")
+            self.onStop()
 
 
     def onExec(self):
@@ -357,38 +358,38 @@ class Run(Frame):
             self.dataPrismaLength[0,:] = self.ik_prismatic()
 
             if self.travelVel > 0:
-				self.travelTime = self.travelLength / self.travelVel
-				#print(self.travelTime)
+                self.travelTime = self.travelLength / self.travelVel
+                #print(self.travelTime)
 			
             else:
-				self.travelTime = 0.1           
+                self.travelTime = 0.1           
             
             if self.travelTime > 0:
-				self.dL = (self.dataPrismaLength[0,:] - self.dataPrismaLength[1,:]) / self.travelTime
+                self.dL = (self.dataPrismaLength[0,:] - self.dataPrismaLength[1,:]) / self.travelTime
             else:
-				self.dL = np.zeros(6)
+                self.dL = np.zeros(6)
             
             self.timeSystem = self.timeSystem + self.travelTime
             self.travel = self.inputPos - self.lastPos
             self.travelLength = np.sqrt(np.dot(self.travel , self.travel.T))
-            
+
             self.maxDL = np.max(np.abs(self.dL))
-                   
+                    
             self.writeNC()
                         
             lbl = ["A","B","C","D","E","F"]
             text1 = text2 = ""
             for i in range(0,6):
-				text1 += "L" + lbl[i] + "{:.2f} ".format(self.prismaLength[i])
+                text1 += "L" + lbl[i] + "{:.2f} ".format(self.prismaLength[i])
 
             for i in range(0,6):
-				text2 += "dL" + lbl[i] + "{:.2f} ".format(self.dL[i])
-            
+                text2 += "dL" + lbl[i] + "{:.2f} ".format(self.dL[i])
+
             text = text1 + text2 + "T" + "{:.2f}".format(self.timeSystem) + "\n"
-            
+
             self.txtNC.insert(self.lineNC, text)
             self.lineNC += 1
-            
+
             self.lblNotif.update()
             self.lastPos = self.inputPos
             self.lastRot = self.inputRot
@@ -409,15 +410,15 @@ class Run(Frame):
             self.dataPrismaLength[0,:] = self.ik_prismatic()
 
             if self.travelVel > 0:
-				self.travelTime = self.travelLength / self.travelVel
+                self.travelTime = self.travelLength / self.travelVel
 			
             else:
-				self.travelTime = 0.1           
+                self.travelTime = 0.1           
             
             if self.travelTime > 0:
-				self.dL = (self.dataPrismaLength[0,:] - self.dataPrismaLength[1,:]) / self.travelTime
+                self.dL = (self.dataPrismaLength[0,:] - self.dataPrismaLength[1,:]) / self.travelTime
             else:
-				self.dL = np.zeros(6)
+                self.dL = np.zeros(6)
             
             self.travel = self.inputPos - self.lastPos
             self.travelLength = np.sqrt(np.dot(self.travel , self.travel.T))
@@ -434,28 +435,26 @@ class Run(Frame):
             tempTime = np.linspace(0, self.travelTime, n)
             
             for i in range (n):
-				self.inputPos = np.array([tempPosX[i], tempPosY[i], tempPosZ[i]])
-				self.inputRot = np.array([np.deg2rad(0.), tempRotB[i], tempRotA[i]])
-				self.ik_orientation()
-				self.ik_position()
-				
-				self.dataPrismaLength[0,:] = self.ik_prismatic()
-				
-				self.resetDataInterpolating()
+                self.inputPos = np.array([tempPosX[i], tempPosY[i], tempPosZ[i]])
+                self.inputRot = np.array([np.deg2rad(0.), tempRotB[i], tempRotA[i]])
+                self.ik_orientation()
+                self.ik_position()
+                
+                self.dataPrismaLength[0,:] = self.ik_prismatic()
+                self.resetDataInterpolating()
+                self.writeNC()
+                
+                lbl = ["A","B","C","D","E","F"]
+                text1 = text2 = ""
+                for j in range(0,6):
+                    text1 += "L" + lbl[j] + "{:.2f} ".format(self.prismaLength[j])
+                    
+                for k in range(0,6):
+                    text2 += "dL" + lbl[k] + "{:.2f} ".format(self.dL[k])
 
-				self.writeNC()
-				
-				lbl = ["A","B","C","D","E","F"]
-				text1 = text2 = ""
-				for j in range(0,6):
-					text1 += "L" + lbl[j] + "{:.2f} ".format(self.prismaLength[j])
-					
-				for k in range(0,6):
-					text2 += "dL" + lbl[k] + "{:.2f} ".format(self.dL[k])
-				
-				text = text1 + text2 + "T" + "{:.2f}".format(self.timeSystem + tempTime[i]) + "\n"
-				self.txtNC.insert(self.lineNC, text)
-				self.lineNC += 1
+                text = text1 + text2 + "T" + "{:.2f}".format(self.timeSystem + tempTime[i]) + "\n"
+                self.txtNC.insert(self.lineNC, text)
+                self.lineNC += 1
         
             self.lblNotif.update()
             self.lastPos = self.inputPos
@@ -477,13 +476,13 @@ class Run(Frame):
             self.line += 1.0
         
     def onSave(self):
-        name=tkFileDialog.asksaveasfile(mode='w',defaultextension=".gcode")
+        name = filedialog.asksaveasfile(mode='w',defaultextension=".gcode")
         text2save=str(self.txtGCode.get(0.0,END))
         name.write(text2save)
         name.close
 
     def onExport(self):
-        name=tkFileDialog.asksaveasfile(mode='w',defaultextension=".spnc")
+        name = filedialog.asksaveasfile(mode='w',defaultextension=".spnc")
         text2save=str(self.txtNC.get(0.0,END))
         name.write(text2save)
         name.close
@@ -499,7 +498,7 @@ class Run(Frame):
 
     def onOpen(self):
         ftypes = [('G-code files', '*.gcode'), ('All files', '*')]
-        dlg = tkFileDialog.Open(self, filetypes = ftypes)
+        dlg = filedialog.Open(self, filetypes = ftypes)
         fl = dlg.show()
 
         if fl != '':
@@ -565,7 +564,7 @@ class Run(Frame):
 
     def onExit(self):
         self.quit()
-        self.destroy()
+        # self.destroy()
         
     def ik_prismatic(self):
         for i in range(6):
@@ -678,7 +677,7 @@ class Run(Frame):
 
 def main():
     root = Tk()
-    myFont = tkFont.nametofont("TkDefaultFont")
+    myFont = font.nametofont("TkDefaultFont")
     myFont.configure(size=10)
      
     run = Run(root)
@@ -687,7 +686,7 @@ def main():
     root.option_add('*Font', myFont)
     root.mainloop()
     root.quit()
-    root.destroy()
+    # root.destroy()
 
 
 if __name__ == '__main__':
