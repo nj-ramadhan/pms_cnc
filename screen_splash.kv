@@ -1,0 +1,64 @@
+#:kivy 2.1.0
+
+<ScreenSplash>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+        Label:
+            text: 'PMS-CNC'
+            halign: 'center'
+            valign: 'bottom'
+            font_size: 80
+            bold: True
+            size_hint_y: 0.15
+            color: 0, 0, 0
+
+        Label:
+            text: 'PARALLEL MECHANISM SYSTEM - COMPUTER NUMERICAL CONTROL'
+            halign: 'center'
+            valign: 'top'
+            font_size: 40
+            size_hint_y: 0.05
+            color: 0, 0, 0
+
+        Image:
+            id: logo
+            source:'asset/logo_clr.png'
+            size_hint_y: 0.25
+            allow_stretch: True
+
+        Label:
+            text: ''
+            size_hint_y: 0.05
+
+        MDProgressBar:
+            id: progress_bar
+            size_hint_y: .02
+            max: 100
+            value: 1
+
+        Label:
+            id: progress_bar_label
+            text: 'Loading.. [0 %]'
+            halign: 'center'
+            valign: 'middle'
+            font_size: 50
+            bold: 'true'
+            size_hint_y: .1
+            color: 0, 0, 0
+
+        Image:
+            id: logo
+            source:'asset/logo_polman_txt.png'
+            size_hint_y: 0.05
+            allow_stretch: True
+
+        Label:
+            text: 'Developed in Polman Bandung Copyrights @2022'
+            halign: 'center'
+            valign: 'middle'
+            font_size: 20
+            bold: 'true'
+            size_hint_y: 0.05
+            color: 0, 0, 0

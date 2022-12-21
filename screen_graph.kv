@@ -1,0 +1,129 @@
+#:kivy 2.1.0
+
+<ScreenGraph>:
+    BoxLayout:
+        orientation: "vertical"
+		# header layout
+        BoxLayout:
+            id: header_layout
+            orientation: "horizontal"
+            padding: 20
+			size_hint_y: 0.1
+            Image:
+                id: logo_cnc
+                source:'asset/logo.png'
+                size_hint_x: 0.25
+                allow_stretch: True
+
+            BoxLayout:
+                orientation: "vertical"
+				spacing: 20
+
+                Label:
+                    id: title            
+                    text: "PMS-CNC"
+                    bold: True
+                    font_size: 70
+                    color: 0, 0, 0
+
+                Label:
+                    id: subtitle            
+                    text: "PARALLEL MECHANISM SYSTEM - COMPUTER NUMERICAL CONTROL"
+                    bold: True
+                    font_size: 20
+                    color: 0, 0, 0
+            Image:
+                id: logo_polman
+                source:'asset/logo_polman.png'
+                size_hint_x: 0.2
+                allow_stretch: True
+		
+		# graph layout
+		BoxLayout:
+			orientation: "vertical"
+			size_hint_y: 0.5
+			padding:10
+			spacing:10
+
+			Label:
+				text: "GRAPH SCREEN"
+				bold: True
+				font_size: 32
+				color: 0, 0, 0
+				size_hint_y: 0.1
+				
+			BoxLayout:
+				id: layout_graph
+				orientation: "horizontal"
+				size_hint_y: 0.66
+				spacing: 20
+
+		# MDRectangleFlatIconButton: navigation layout
+		BoxLayout:
+			orientation: "horizontal"
+			size_hint_y: 0.06
+			padding:10
+			spacing:10
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_1
+				icon: "cogs"
+				text: "SETTING"
+				font_size: 22
+				on_press: root.screen_setting()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_2
+				icon: "pencil"
+				text: "DATA"
+				font_size: 22
+				on_press: root.screen_data()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_3
+				icon: "chart-line"
+				text: "GRAPH"
+				font_size: 22
+				on_press: root.screen_graph()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_4
+				icon: "cogs"
+				text: "SETTING"
+				font_size: 22
+				on_press: root.screen_setting()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_5
+				icon: "pencil"
+				text: "DATA"
+				font_size: 22
+				on_press: root.screen_data()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_6
+				icon: "chart-line"
+				text: "GRAPH"
+				font_size: 22
+				on_press: root.screen_graph()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_7
+				icon: "cogs"
+				text: "SETTING"
+				font_size: 22
+				on_press: root.screen_setting()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_8
+				icon: "pencil"
+				text: "DATA"
+				font_size: 22
+				on_press: root.screen_data()
+
+			MDRectangleFlatIconButton:
+				id: bt_screen_9
+				icon: "chart-line"
+				text: "GRAPH"
+				font_size: 22
+				on_press: root.screen_graph()
