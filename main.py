@@ -263,7 +263,7 @@ class PMS_CNCApp(MDApp):
         # Window.size = (1280, 786)
         Window.size = (1024, 600)
         Window.allow_screensaver = True
-        self.icon = 'asset/logo_labtek_p.ico'
+        self.icon = 'asset/logo.ico'
 
         screen = Builder.load_file('main.kv')
 
