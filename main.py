@@ -20,7 +20,7 @@ import matplotlib as mpl
 from matplotlib.figure import Figure
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from matplotlib.ticker import AutoMinorLocator
-from kivymd.uix.datatables import MDDataTable
+from datetime import datetime
 
 plt.style.use('bmh')
 
@@ -76,8 +76,50 @@ class ScreenSplash(BoxLayout):
             self.ids.progress_bar.value = 100
             self.ids.progress_bar_label.text = 'Loading.. [{:} %]'.format(100)
             time.sleep(0.5)
-            self.screen_manager.current = 'screen_setting'
+            self.screen_manager.current = 'screen_home'
             return False
+
+class ScreenHome(BoxLayout):
+    screen_manager = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(ScreenHome, self).__init__(**kwargs)
+        Clock.schedule_once(self.delayed_init)
+        Clock.schedule_interval(self.regular_check, 1)
+
+    def regular_check(self, dt):
+        x = datetime.now()
+        text_waktu = x.strftime("%H:%M:%S\n%Y-%m-%d")
+        self.ids.text_jam.text = text_waktu
+        global flag_run
+
+    def delayed_init(self, dt):
+        self.fig, self.ax = plt.subplots()
+        self.fig.set_facecolor("#eeeeee")
+        self.fig.tight_layout(pad=3.0)
+
+    def illustrate(self):
+        global dt_mode
+        global dt_config
+
+    def measure(self):
+        global flag_run
+        if(flag_run):
+            flag_run = False
+        else:
+            flag_run = True
+
+    def screen_home(self):
+        self.screen_manager.current = 'screen_home'
+    
+    def screen_setting(self):
+        self.screen_manager.current = 'screen_setting'
+
+    def screen_data(self):
+        self.screen_manager.current = 'screen_data'
+
+    def screen_graph(self):
+        self.screen_manager.current = 'screen_graph'
 
 class ScreenSetting(BoxLayout):
     screen_manager = ObjectProperty(None)
@@ -85,9 +127,12 @@ class ScreenSetting(BoxLayout):
     def __init__(self, **kwargs):
         super(ScreenSetting, self).__init__(**kwargs)
         Clock.schedule_once(self.delayed_init)
-        Clock.schedule_interval(self.regular_check, 0.1)
+        Clock.schedule_interval(self.regular_check, 1)
 
     def regular_check(self, dt):
+        x = datetime.now()
+        text_waktu = x.strftime("%H:%M:%S\n%Y-%m-%d")
+        self.ids.text_jam.text = text_waktu
         global flag_run
 
     def delayed_init(self, dt):
@@ -208,12 +253,15 @@ class ScreenGraph(BoxLayout):
     def screen_graph(self):
         self.screen_manager.current = 'screen_graph'
 
-class BSDSApp(MDApp):
+class PMS_CNCApp(MDApp):
     def build(self):
         self.theme_cls.colors = colors
         self.theme_cls.primary_palette = "Blue"
-        Window.fullscreen = 'auto'
-        Window.borderless = True
+        # Window.fullscreen = 'auto'
+        # Window.borderless = True
+        # Window.size = (1280, 1024)
+        # Window.size = (1280, 786)
+        Window.size = (1024, 600)
         Window.allow_screensaver = True
         self.icon = 'asset/logo_labtek_p.ico'
 
@@ -223,4 +271,4 @@ class BSDSApp(MDApp):
 
 
 if __name__ == '__main__':
-    BSDSApp().run()
+    PMS_CNCApp().run()

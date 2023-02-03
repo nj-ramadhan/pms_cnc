@@ -2,7 +2,6 @@
 
 #:import NoTransition kivy.uix.screenmanager.NoTransition
 #:include screen_splash.kv
-#:include screen_home.kv
 #:include screen_setting.kv
 #:include screen_data.kv
 #:include screen_graph.kv
@@ -16,12 +15,6 @@ ScreenManager:
             app_window: app
             screen_manager: screen_manager
             screen_setting: screen_setting
-
-    Screen:
-        name: 'screen_home'
-        ScreenHome:
-            id: screen_home
-            screen_manager: screen_manager
 
     Screen:
         name: 'screen_setting'
