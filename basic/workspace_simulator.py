@@ -1,49 +1,33 @@
-# import matplotlib as mpl
-# mpl.use("TkAgg")
-# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# from matplotlib.figure import Figure
-# from matplotlib import style
-# import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.tri import Triangulation
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
-
-# # generate some random data
-# x = np.random.rand(100)
-# y = np.random.rand(100)
-# z = np.random.rand(100)
-
-# # create a 3D figure
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
-
-# # plot the scatter points
-# ax.scatter(x, y, z, c='r', marker='o')
-
-# # set the axis labels
-# ax.set_xlabel('X Label')
-# ax.set_ylabel('Y Label')
-# ax.set_zlabel('Z Label')
-
-# # show the plot
-# plt.show()
-   
-class Run():
+ 
+class Workspace():
     inputPos = np.array([0., 0., 0.])
     inputRot = np.array([np.deg2rad(0.), np.deg2rad(0.), np.deg2rad(0.)])
-    trajectory = np.array([[inputPos[0]], [inputPos[1]], [inputPos[2]]])
     lastPos = np.zeros(3)
     lastRot = np.zeros(3)
     machineOffset = np.array([0., 0., 800.])
-    toolOffset = ([0, 0, 90])
+    toolOffset = ([0, 0, 0])
 
     basePos = np.zeros((6, 3))
     platformPos = np.zeros((6, 3))
     prisma = np.zeros(3)
     prismaLength = np.zeros(6)
     dataPrismaLength = np.zeros((2,6))
+
+    static_posz = 350.
+
+    trajectory = np.array([[inputPos[0]], [inputPos[1]], [inputPos[2]]])
+    rotating_joint0 = np.array([[0.], [0.], [static_posz]])
+    rotating_joint1 = np.array([[0.], [0.], [static_posz]])
+    rotating_joint2 = np.array([[0.], [0.], [static_posz]])
+    rotating_joint3 = np.array([[0.], [0.], [static_posz]])
+    rotating_joint4 = np.array([[0.], [0.], [static_posz]])
+    rotating_joint5 = np.array([[0.], [0.], [static_posz]])
+
     travel = np.zeros(3)
     travelLength = 0
     travelVel = 0
@@ -71,7 +55,7 @@ class Run():
                                 np.deg2rad(-110),
                                 np.deg2rad(-10)])        
 
-    def draw(self):
+    def draw(self, mode):
         # create a 3D figure
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
@@ -97,20 +81,44 @@ class Run():
         # ax.plot3D([-400,400], [0,0], [0,0], color="r")
         # ax.plot3D([0, 0], [-400, 400], [0, 0], color="r")
         # ax.plot3D([self.posMatrix[0], self.inputMatrix[0]], [self.posMatrix[1], self.inputMatrix[1]], [self.posMatrix[2], self.inputMatrix[2]])
-       
-        tri = Triangulation(self.trajectory[0], self.trajectory[1])
+
+        # Define sphere parameters
+        r = self.rPlatform
+        pi = np.pi
+        cos = np.cos
+        sin = np.sin
+        phi, theta = np.mgrid[0.0:pi:100j, 0.0:2 * pi:100j]
+
+        # Define cartesian coordinates
+        x = r*sin(phi)*cos(theta)
+        y = r*sin(phi)*sin(theta)
+        z = (r*cos(phi)) + self.static_posz
+
+        # Plot sphere
+        ax.plot_surface(x, y, z, color='gray', alpha=0.2)
+
+        ax.set_box_aspect([1, 1, 1])
 
         # plot the scatter points
-        cmap = matplotlib.colormaps['RdYlGn_r'] 
-        # cmap = plt.cm.get_cmap('RdYlGn_r')
-        # ax.scatter(self.trajectory[0], self.trajectory[1], self.trajectory[2], c=self.trajectory[2], cmap=cmap, s=5, alpha=0.5)
-        ax.plot_trisurf(self.trajectory[0], self.trajectory[1], self.trajectory[2], triangles=tri.triangles, cmap=cmap)
-        # cbar = plt.colorbar()
-        # cbar.set_label('Z values')
-        # set the axis labels
+        cmap = matplotlib.colormaps['RdYlGn_r']
+        # cmap = matplotlib.colormaps['gray']
+
+        if(mode=="position"):
+            tri = Triangulation(self.trajectory[0], self.trajectory[1])
+            ax.scatter(self.trajectory[0], self.trajectory[1], self.trajectory[2], c=self.trajectory[2], cmap=cmap)
+
+        elif(mode=="orientation"):
+            ax.scatter(self.rotating_joint0[0], self.rotating_joint0[1], self.rotating_joint0[2], c=self.rotating_joint0[2], cmap=cmap)
+            # ax.scatter(self.rotating_joint1[0], self.rotating_joint1[1], self.rotating_joint1[2], c=self.rotating_joint1[2], cmap=cmap)
+            # ax.scatter(self.rotating_joint2[0], self.rotating_joint2[1], self.rotating_joint2[2], c=self.rotating_joint2[2], cmap=cmap)
+            # ax.scatter(self.rotating_joint3[0], self.rotating_joint3[1], self.rotating_joint3[2], c=self.rotating_joint3[2], cmap=cmap)
+            # ax.scatter(self.rotating_joint4[0], self.rotating_joint4[1], self.rotating_joint4[2], c=self.rotating_joint4[2], cmap=cmap)
+            # ax.scatter(self.rotating_joint5[0], self.rotating_joint5[1], self.rotating_joint5[2], c=self.rotating_joint5[2], cmap=cmap)
+
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')
+
         # show the plot
         plt.show()
 
@@ -180,10 +188,17 @@ class Run():
         if (self.shortPrismatic >= self.minLength) and (self.longPrismatic <= self.maxLength): 
             self.trajectory = np.append(self.trajectory, [[self.inputPos[0]], [self.inputPos[1]], [self.inputPos[2]]], axis=1)
 
-    def main(self):
-        for z in range(0, 300, 20):
-            for y in range(-400, 400, 50):
-                for x in range(-400, 400, 50):
+            self.rotating_joint0 = np.append(self.rotating_joint0, [[self.platformPos[0,0]], [self.platformPos[0,1]], [self.platformPos[0,2]]], axis=1)
+            self.rotating_joint1 = np.append(self.rotating_joint1, [[self.platformPos[1,0]], [self.platformPos[1,1]], [self.platformPos[1,2]]], axis=1)
+            self.rotating_joint2 = np.append(self.rotating_joint2, [[self.platformPos[2,0]], [self.platformPos[2,1]], [self.platformPos[2,2]]], axis=1)
+            self.rotating_joint3 = np.append(self.rotating_joint3, [[self.platformPos[3,0]], [self.platformPos[3,1]], [self.platformPos[3,2]]], axis=1)
+            self.rotating_joint4 = np.append(self.rotating_joint4, [[self.platformPos[4,0]], [self.platformPos[4,1]], [self.platformPos[4,2]]], axis=1)
+            self.rotating_joint5 = np.append(self.rotating_joint5, [[self.platformPos[5,0]], [self.platformPos[5,1]], [self.platformPos[5,2]]], axis=1)                                                
+
+    def position(self):
+        for z in range(0, 290, 20):
+            for y in range(-350, 350, 20):
+                for x in range(-370, 390, 20):
                     self.inputPos = np.array([x, y, z])
                     self.inputRot = np.array([np.deg2rad(0.), np.deg2rad(0.), np.deg2rad(0.)])
                     
@@ -192,9 +207,28 @@ class Run():
                     self.dataPrismaLength[0,:] = self.ik_prismatic()
                     self.validator() 
                     print(x,y,z)
-        self.draw()
+        self.draw("position")
+        print("min x: ", np.min(self.trajectory[0]), ", max x: ", np.max(self.trajectory[0]))
+        print("min y: ", np.min(self.trajectory[1]), ", max y: ", np.max(self.trajectory[1]))
+        print("min z: ", np.min(self.trajectory[2]), ", max z: ", np.max(self.trajectory[2]))
 
+
+    def orientation(self):
+        roll = 0
+        pitch = 0
+        yaw = 0
+        self.inputPos = np.array([0., 0., self.static_posz])
+        self.inputRot = np.array([np.deg2rad(roll), np.deg2rad(pitch), np.deg2rad(yaw)])
+        for yaw in range(-180, 180, 5):
+            for roll in range(-180, 180, 5):
+                self.inputRot = np.array([np.deg2rad(roll), np.deg2rad(pitch), np.deg2rad(yaw)])
+                self.ik_orientation()
+                self.ik_position()
+                self.dataPrismaLength[0,:] = self.ik_prismatic()
+                self.validator()
+                print(roll,pitch,yaw)
+        self.draw("orientation")
 
 if __name__ == '__main__':
-    run = Run()
-    run.main()
+    ws = Workspace()
+    ws.orientation()
