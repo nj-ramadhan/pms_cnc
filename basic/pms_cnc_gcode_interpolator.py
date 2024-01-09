@@ -47,8 +47,8 @@ class Run(Frame):
         self.rPlatform = 72.  # in mm = 144 / 2
         self.rBase = 218.     # in mm = 436 / 2
 
-        self.minLength = 490.     # in mm
-        self.maxLength = 740.     # in mm
+        self.minLength = 440.     # in mm
+        self.maxLength = 640.     # in mm
         self.maxSpeed = 28.    # in mm/s
 
         self.thetaPlatform = np.array([np.deg2rad(45),

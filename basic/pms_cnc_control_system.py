@@ -288,12 +288,12 @@ class Run(Frame):
         self.L_ref_cont = np.concatenate((self.L_ref_cont, self.L_ref))
         self.L_dot_cont = np.concatenate((self.L_dot_cont, self.L_dot))
         self.L_cont = np.concatenate((self.L_cont, self.L))
-        self.time_cont = np.append(self.time_cont, self.time)
+        self.time_cont = np.append(self.time_cont, self.time + np.max(self.time_cont))
 
-        print("time:", self.time)
-        print("time_cont:", self.time_cont)
-        print("L_ref:", self.L_ref)
-        print("L_ref_cont:", self.L_ref_cont)
+        # print("time:", self.time)
+        # print("time_cont:", self.time_cont)
+        # print("L_ref:", self.L_ref)
+        # print("L_ref_cont:", self.L_ref_cont)
 
         self.f.clear()
         self.f.add_subplot(2,6,1).set_ylim([-30,30])
@@ -302,14 +302,20 @@ class Run(Frame):
         self.f.add_subplot(2,6,4).set_ylim([-30,30])
         self.f.add_subplot(2,6,5).set_ylim([-30,30])
         self.f.add_subplot(2,6,6).set_ylim([-30,30])
-        self.f.add_subplot(2,6,1).plot(self.time, self.L_dot_ref[:,0], self.time, self.L_dot[:,0])
-        self.f.add_subplot(2,6,2).plot(self.time, self.L_dot_ref[:,1], self.time, self.L_dot[:,1])
-        self.f.add_subplot(2,6,3).plot(self.time, self.L_dot_ref[:,2], self.time, self.L_dot[:,2])
-        self.f.add_subplot(2,6,4).plot(self.time, self.L_dot_ref[:,3], self.time, self.L_dot[:,3])
-        self.f.add_subplot(2,6,5).plot(self.time, self.L_dot_ref[:,4], self.time, self.L_dot[:,4])
-        self.f.add_subplot(2,6,6).plot(self.time, self.L_dot_ref[:,5], self.time, self.L_dot[:,5])
+        # self.f.add_subplot(2,6,1).plot(self.time, self.L_dot_ref[:,0], self.time, self.L_dot[:,0])
+        # self.f.add_subplot(2,6,2).plot(self.time, self.L_dot_ref[:,1], self.time, self.L_dot[:,1])
+        # self.f.add_subplot(2,6,3).plot(self.time, self.L_dot_ref[:,2], self.time, self.L_dot[:,2])
+        # self.f.add_subplot(2,6,4).plot(self.time, self.L_dot_ref[:,3], self.time, self.L_dot[:,3])
+        # self.f.add_subplot(2,6,5).plot(self.time, self.L_dot_ref[:,4], self.time, self.L_dot[:,4])
+        # self.f.add_subplot(2,6,6).plot(self.time, self.L_dot_ref[:,5], self.time, self.L_dot[:,5])
 
-        # self.f.add_subplot(2,6,6).plot(self.time_cont, self.L_dot_ref_cont[:,5], self.time_cont, self.L_dot_cont[:,5])
+        self.f.add_subplot(2,6,1).plot(self.time_cont, self.L_dot_ref_cont[:,0], self.time_cont, self.L_dot_cont[:,0])
+        self.f.add_subplot(2,6,2).plot(self.time_cont, self.L_dot_ref_cont[:,1], self.time_cont, self.L_dot_cont[:,1])
+        self.f.add_subplot(2,6,3).plot(self.time_cont, self.L_dot_ref_cont[:,2], self.time_cont, self.L_dot_cont[:,2])
+        self.f.add_subplot(2,6,4).plot(self.time_cont, self.L_dot_ref_cont[:,3], self.time_cont, self.L_dot_cont[:,3])
+        self.f.add_subplot(2,6,5).plot(self.time_cont, self.L_dot_ref_cont[:,4], self.time_cont, self.L_dot_cont[:,4])
+        self.f.add_subplot(2,6,6).plot(self.time_cont, self.L_dot_ref_cont[:,5], self.time_cont, self.L_dot_cont[:,5])
+
 
         self.f.add_subplot(2,6,7).set_ylim([450,750])
         self.f.add_subplot(2,6,8).set_ylim([450,750])
@@ -317,12 +323,19 @@ class Run(Frame):
         self.f.add_subplot(2,6,10).set_ylim([450,750])
         self.f.add_subplot(2,6,11).set_ylim([450,750])
         self.f.add_subplot(2,6,12).set_ylim([450,750])
-        self.f.add_subplot(2,6,7).plot(self.time, self.L_ref[:,0], self.time, self.L[:,0])
-        self.f.add_subplot(2,6,8).plot(self.time, self.L_ref[:,1], self.time, self.L[:,1])
-        self.f.add_subplot(2,6,9).plot(self.time, self.L_ref[:,2], self.time, self.L[:,2])
-        self.f.add_subplot(2,6,10).plot(self.time, self.L_ref[:,3], self.time, self.L[:,3])
-        self.f.add_subplot(2,6,11).plot(self.time, self.L_ref[:,4], self.time, self.L[:,4])
-        self.f.add_subplot(2,6,12).plot(self.time, self.L_ref[:,5], self.time, self.L[:,5])
+        # self.f.add_subplot(2,6,7).plot(self.time, self.L_ref[:,0], self.time, self.L[:,0])
+        # self.f.add_subplot(2,6,8).plot(self.time, self.L_ref[:,1], self.time, self.L[:,1])
+        # self.f.add_subplot(2,6,9).plot(self.time, self.L_ref[:,2], self.time, self.L[:,2])
+        # self.f.add_subplot(2,6,10).plot(self.time, self.L_ref[:,3], self.time, self.L[:,3])
+        # self.f.add_subplot(2,6,11).plot(self.time, self.L_ref[:,4], self.time, self.L[:,4])
+        # self.f.add_subplot(2,6,12).plot(self.time, self.L_ref[:,5], self.time, self.L[:,5])
+
+        self.f.add_subplot(2,6,7).plot(self.time_cont, self.L_ref_cont[:,0], self.time_cont, self.L_cont[:,0])
+        self.f.add_subplot(2,6,8).plot(self.time_cont, self.L_ref_cont[:,1], self.time_cont, self.L_cont[:,1])
+        self.f.add_subplot(2,6,9).plot(self.time_cont, self.L_ref_cont[:,2], self.time_cont, self.L_cont[:,2])
+        self.f.add_subplot(2,6,10).plot(self.time_cont, self.L_ref_cont[:,3], self.time_cont, self.L_cont[:,3])
+        self.f.add_subplot(2,6,11).plot(self.time_cont, self.L_ref_cont[:,4], self.time_cont, self.L_cont[:,4])
+        self.f.add_subplot(2,6,12).plot(self.time_cont, self.L_ref_cont[:,5], self.time_cont, self.L_cont[:,5])
 
     def onExec(self):
         self.resetData()
@@ -333,12 +346,10 @@ class Run(Frame):
     def control(self):
         self.L_dot = np.zeros([1,6])
         self.L_dot_ref = self.L_dot
-        # self.L_dot_ref = np.append(self.L_dot_ref, self.L_dot)
         
 #        self.L = np.array([[597.010, 597.010, 597.010, 597.010, 597.010, 597.010]])
         self.L = np.array([[float(self.lastText[0]),float(self.lastText[1]),float(self.lastText[2]),float(self.lastText[3]),float(self.lastText[4]),float(self.lastText[5])]])
         self.L_ref = self.L
-        # self.L_ref = np.append(self.L_ref, self.L)
                        
         # position and velocity goals
         #L_goal = np.ones(6) * 597.018
